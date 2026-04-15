@@ -13,8 +13,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Run tests
+        run: ./test.sh
+
       - name: Build Docker image
         run: docker build -t my-app .
 
-      - name: Test message
-        run: echo "Build terminé avec succès"
+      - name: Final message
+        run: echo "Pipeline complet OK"
