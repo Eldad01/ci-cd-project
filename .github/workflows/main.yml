@@ -20,10 +20,12 @@ jobs:
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/my-app .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }} .
+        run: docker tag ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }} ${{ secrets.DOCKER_USERNAME }}/my-app:latest
 
       - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/my-app
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/my-app:${{ github.sha }}
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/my-app:latest
 
       - name: Done
         run: echo "Image envoyée sur Docker Hub"
