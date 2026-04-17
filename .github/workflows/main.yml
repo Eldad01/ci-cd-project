@@ -31,3 +31,15 @@ jobs:
 
       - name: Done
         run: echo "Image envoyée sur Docker Hub"
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/my-app:latest
+            docker stop my-app || true
+            docker rm my-app || true
+            docker run -d -p 8080:80 --name my-app ${{ secrets.DOCKER_USERNAME }}/my-app:latest
